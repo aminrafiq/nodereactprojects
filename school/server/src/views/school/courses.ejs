@@ -1,0 +1,47 @@
+<%- include ('../includes/header') %>
+<div class="content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool">
+                <a href="/courses/add"
+                  ><i class="fas fa-plus"></i> Add Course</a
+                >
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th style="width: 40%;">Title</th>
+                  <th>Description</th>
+                  <% /* <th style="width: 14%">Total Courses</th> */ %>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (coursesData.length > 0) { %> 
+                  <% for(let course of coursesData) { %>
+                    <tr>
+                      <td><%-++courseListStart%></td>
+                      <td><%-course['title']%></td>
+                      <td><%-course['description']%></td>
+                    </tr>
+                  <% } %>
+                <% } else { %> <% } %>
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+  </div>
+</div>
+<%- include ('../includes/footer') %>
