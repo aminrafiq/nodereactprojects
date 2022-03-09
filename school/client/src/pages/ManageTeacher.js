@@ -7,6 +7,98 @@ import Footer from "../components/Footer";
 import axios from "axios";
 
 const ManageTeacher = () => {
+    var teacherMessage;
+
+    const [enteredTeacher, setTeacher] = useState({
+        email: "",
+        password: "",
+    });
+
+    const [errorState, setTeacherErrors] = useState({
+        fullnameError: "",
+        emailError: "",
+        passwordError: "",
+        repasswordError: "",
+    });
+
+    const [teacherError, setTeacherError] = useState({
+        teacherStatus: "",
+        teacherMessage: "",
+    });
+
+    const handleChange = (e) => {
+        setTeacher({ ...enteredTeacher, [e.target.name]: e.target.value });
+    };
+
+    const submitForm = (e) => {
+        e.preventDefault();
+        const email = enteredTeacher.email;
+        const password = enteredTeacher.password;
+        const isAuthenticated = localStorage.getItem("userData");
+        console.log(JSON.parse(isAuthenticated));
+
+        if (email !== "" && password !== "") {
+            axios
+                .post(`${API_BASE_URL}teacher`, {
+                    email: email,
+                    password: password,
+                })
+                .then((response) => {
+                    setTeacherError({
+                        teacherResult: response.data.result,
+                        teacherMessage: response.data.message,
+                    });
+
+                    if (response.data.result === "success") {
+                        localStorage.setItem("isLoggedIn", true);
+                        localStorage.setItem(
+                            "userData",
+                            JSON.stringify(response.data.userInformation)
+                        );
+                        setTeacher({ email: "", password: "" });
+                    }
+                })
+                .catch(function (error) {
+                    console.log('i am here');
+                    setTeacherError({
+                        teacherResult: error.response.data.result,
+                        teacherMessage: error.response.data.message,
+                    });
+                });
+        } else {
+            let emailError;
+            let passwordError;
+
+            if (email === "") {
+                emailError = "Please enter email";
+            }
+            if (password === "") {
+                passwordError = "Please enter password";
+            }
+
+            if (emailError || passwordError) {
+                setTeacherErrors({
+                    emailError,
+                    passwordError,
+                });
+            }
+        }
+    };
+
+    if (teacherError.teacherResult === "error") {
+        teacherMessage = (
+            <div className="alert alert-danger alert-dismissible text-center">
+                {teacherError.teacherMessage}
+            </div>
+        );
+    } else if (teacherError.teacherResult === "success") {
+        teacherMessage = (
+            <div className="alert alert-success alert-dismissible text-center">
+                {teacherError.teacherMessage}
+            </div>
+        );
+    }
+
     return (
         <div className="wrapper">
             <Header />

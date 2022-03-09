@@ -4,9 +4,8 @@ import { API_BASE_URL } from "../constants";
 import axios from "axios";
 import InputField from "../components/InputField";
 
-var loginMessage;
-
 const Login = () => {
+  var loginMessage;
   const navigate = useNavigate();
 
   const [enteredLogin, setLogin] = useState({

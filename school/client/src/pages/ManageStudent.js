@@ -7,6 +7,98 @@ import Footer from "../components/Footer";
 import axios from "axios";
 
 const ManageStudent = () => {
+    var studentMessage;
+
+    const [enteredStudent, setStudent] = useState({
+        email: "",
+        password: "",
+    });
+
+    const [errorState, setStudentErrors] = useState({
+        fullnameError: "",
+        emailError: "",
+        passwordError: "",
+        repasswordError: "",
+    });
+
+    const [studentError, setStudentError] = useState({
+        studentStatus: "",
+        studentMessage: "",
+    });
+
+    const handleChange = (e) => {
+        setStudent({ ...enteredStudent, [e.target.name]: e.target.value });
+    };
+
+    const submitForm = (e) => {
+        e.preventDefault();
+        const email = enteredStudent.email;
+        const password = enteredStudent.password;
+        const isAuthenticated = localStorage.getItem("userData");
+        console.log(JSON.parse(isAuthenticated));
+
+        if (email !== "" && password !== "") {
+            axios
+                .post(`${API_BASE_URL}student`, {
+                    email: email,
+                    password: password,
+                })
+                .then((response) => {
+                    setStudentError({
+                        studentResult: response.data.result,
+                        studentMessage: response.data.message,
+                    });
+
+                    if (response.data.result === "success") {
+                        localStorage.setItem("isLoggedIn", true);
+                        localStorage.setItem(
+                            "userData",
+                            JSON.stringify(response.data.userInformation)
+                        );
+                        setStudent({ email: "", password: "" });
+                    }
+                })
+                .catch(function (error) {
+                    console.log('i am here');
+                    setStudentError({
+                        studentResult: error.response.data.result,
+                        studentMessage: error.response.data.message,
+                    });
+                });
+        } else {
+            let emailError;
+            let passwordError;
+
+            if (email === "") {
+                emailError = "Please enter email";
+            }
+            if (password === "") {
+                passwordError = "Please enter password";
+            }
+
+            if (emailError || passwordError) {
+                setStudentErrors({
+                    emailError,
+                    passwordError,
+                });
+            }
+        }
+    };
+
+    if (studentError.studentResult === "error") {
+        studentMessage = (
+            <div className="alert alert-danger alert-dismissible text-center">
+                {studentError.studentMessage}
+            </div>
+        );
+    } else if (studentError.studentResult === "success") {
+        studentMessage = (
+            <div className="alert alert-success alert-dismissible text-center">
+                {studentError.studentMessage}
+            </div>
+        );
+    }
+
     return (
         <div className="wrapper">
             <Header />
