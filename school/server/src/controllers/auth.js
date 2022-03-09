@@ -56,7 +56,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       if (!user) {
         userMessage = "Incorrect login details";
-        res.status(401).json({ status: statusMessage, message: userMessage });
+        res.status(401).json({ result: statusMessage, message: userMessage });
       }
       bcrypt
         .compare(req.body.password, user.password)

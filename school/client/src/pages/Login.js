@@ -60,6 +60,7 @@ const Login = () => {
           }
         })
         .catch(function (error) {
+          console.log('i am here');
           setLoginError({
             loginResult: error.response.data.result,
             loginMessage: error.response.data.message,
