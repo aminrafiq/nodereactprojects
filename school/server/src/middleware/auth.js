@@ -1,18 +1,26 @@
-const isLoggedIn = (req, res, next) => {
-  if (req.session.isLoggedIn) {
-    return res.redirect("/dashboard");
+const jwt = require('jsonwebtoken');
+
+module.exports = (req, res, next) => {
+  const authHeader = req.get('Authorization');
+  if (!authHeader) {
+    const error = new Error('Not authenticated.');
+    error.statusCode = 401;
+    throw error;
+  }
+  const token = authHeader.split(' ')[1];
+  let decodedToken;
+  console.log(token);
+  try {
+    decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    err.statusCode = 401;
+    err.message = 'Not authenticated';
+    throw err;
+  }
+  if (!decodedToken) {
+    const error = new Error('Not authenticated.');
+    error.statusCode = 401;
+    throw error;
   }
   next();
-};
-
-const notLoggedIn = (req, res, next) => {
-  if (!req.session.isLoggedIn) {
-    return res.redirect("/login");
-  }
-  next();
-};
-
-module.exports = {
-  isLoggedIn,
-  notLoggedIn,
 };

@@ -7,6 +7,25 @@ import Footer from "../components/Footer";
 import axios from "axios";
 
 const Teachers = () => {
+
+  useEffect(() => {
+    document.title = "Teachers"
+  }, [])
+
+  axios
+    .get(`${API_BASE_URL}teachers`)
+    .then((response) => {
+      if (response.data.result === "success") {
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(response.data.userInformation)
+        );
+      }
+    })
+    .catch(function (error) {
+    });
+
   return (
     <div className="wrapper">
       <Header />

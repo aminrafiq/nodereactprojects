@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../constants";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
 import axios from "axios";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Dashboard"
   }, [])
-
 
   return (
     <div className="wrapper">

@@ -25,18 +25,18 @@ const Header = () => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-                    <ul class="navbar-nav">
-                        <li class="nav-item<%=path === '/dashboards' ? 'nav-item active' : 'nav-item' %>">
+                <div className="collapse navbar-collapse order-3" id="navbarCollapse">
+                    <ul className="navbar-nav">
+                        <li className="nav-item<%=path === '/dashboards' ? 'nav-item active' : 'nav-item' %>">
                             <Link to="/dashboard" className="nav-link">Dashboard</Link>
                         </li>
-                        <li class="nav-item<%=path === '/courses' ? 'nav-item active' : 'nav-item' %>">
+                        <li className="nav-item<%=path === '/courses' ? 'nav-item active' : 'nav-item' %>">
                             <Link to="/courses" className="nav-link">Courses</Link>
                         </li>
-                        <li class="nav-item<%=path === '/students' ? 'nav-item active' : 'nav-item' %>">
+                        <li className="nav-item<%=path === '/students' ? 'nav-item active' : 'nav-item' %>">
                             <Link to="/students" className="nav-link">Students</Link>
                         </li>
-                        <li class="nav-item<%=path === '/teachers' ? 'nav-item active' : 'nav-item' %>">
+                        <li className="nav-item<%=path === '/teachers' ? 'nav-item active' : 'nav-item' %>">
                             <Link to="/teachers" className="nav-link">Teachers</Link>
                         </li>
                     </ul>

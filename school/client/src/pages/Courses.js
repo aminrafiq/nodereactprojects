@@ -1,12 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useDebugValue } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../constants";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
 import axios from "axios";
+import { TOKEN } from "../utils/LoginInformation";
 
 const Courses = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!TOKEN) {
+      navigate('/');
+    }
+    document.title = "Courses"
+  })
+
+  axios
+    .get(`${API_BASE_URL}courses`, {
+      headers: {
+        Authorization: 'Bearer ' + TOKEN
+      }
+    })
+    .then((response) => {
+      if (response.data.result === "success") {
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(response.data.userInformation)
+        );
+      }
+    })
+    .catch(function (error) {
+      navigate('/');
+    });
+
   return (
     <div className="wrapper">
       <Header />

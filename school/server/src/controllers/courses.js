@@ -3,12 +3,6 @@ const Course = require("../models/course");
 exports.getCourses = (req, res, next) => {
   Course.findAll()
     .then((courses) => {
-      res.render("school/courses", {
-        path: "/courses",
-        pageTitle: "Courses",
-        courseListStart: 0,
-        coursesData: courses,
-      });
     })
     .catch((error) => {
       console.log(error);

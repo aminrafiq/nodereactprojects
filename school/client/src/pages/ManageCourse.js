@@ -1,24 +1,23 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { API_BASE_URL } from "../constants";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
 import axios from "axios";
+import InputField from "../components/InputField";
+import { TOKEN } from "../utils/LoginInformation";
 
 const ManageCourse = () => {
     var courseMessage;
 
     const [enteredCourse, setCourse] = useState({
-        email: "",
-        password: "",
+        title: "",
+        description: "",
     });
 
     const [errorState, setCourseErrors] = useState({
-        fullnameError: "",
-        emailError: "",
-        passwordError: "",
-        repasswordError: "",
+        titleError: "",
+        descriptionError: "",
     });
 
     const [courseError, setCourseError] = useState({
@@ -32,14 +31,19 @@ const ManageCourse = () => {
 
     const submitForm = (e) => {
         e.preventDefault();
-        const email = enteredCourse.email;
-        const password = enteredCourse.password;
+        const title = enteredCourse.title;
+        const description = enteredCourse.description;
 
-        if (email !== "" && password !== "") {
+        if (title !== "" && description !== "") {
             axios
-                .post(`${API_BASE_URL}login`, {
-                    email: email,
-                    password: password,
+                .post(`${API_BASE_URL}courses/add`, {
+                    title: title,
+                    description: description,
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
                 })
                 .then((response) => {
                     setCourseError({
@@ -53,7 +57,7 @@ const ManageCourse = () => {
                             "userData",
                             JSON.stringify(response.data.userInformation)
                         );
-                        setCourse({ email: "", password: "" });
+                        setCourse({ description: "", email: "" });
                     }
                 })
                 .catch(function (error) {
@@ -63,20 +67,20 @@ const ManageCourse = () => {
                     });
                 });
         } else {
-            let emailError;
-            let passwordError;
+            let titleError;
+            let descriptionError;
 
-            if (email === "") {
-                emailError = "Please enter email";
+            if (title === "") {
+                titleError = "Please enter title";
             }
-            if (password === "") {
-                passwordError = "Please enter password";
+            if (description === "") {
+                descriptionError = "Please enter description";
             }
 
-            if (emailError || passwordError) {
+            if (titleError || descriptionError) {
                 setCourseErrors({
-                    emailError,
-                    passwordError,
+                    titleError,
+                    descriptionError,
                 });
             }
         }
@@ -108,15 +112,53 @@ const ManageCourse = () => {
                                 <div class="row">
                                     <div class="col-md-4 offset-md-4">
                                         <div>
-                                            <form method="post" action="/courses/add">
+                                            <form onSubmit={submitForm}>
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label for="title">Title</label>
-                                                        <input type="text" name="title" id="title" class="form-control" placeholder="Title" />
+                                                        <InputField
+                                                            onChange={handleChange}
+                                                            input={{
+                                                                id: "title",
+                                                                name: "title",
+                                                                type: "text",
+                                                                placeholder: "Title",
+                                                                value: enteredCourse.title,
+                                                                className: "form-control",
+                                                            }}
+                                                        />
+                                                        <div
+                                                            style={{
+                                                                fontSize: 14,
+                                                                color: "red",
+                                                                paddingLeft: "4px",
+                                                            }}
+                                                        >
+                                                            {errorState.titleError}
+                                                        </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="description">Description</label>
-                                                        <input type="text" name="description" id="description" class="form-control" placeholder="Description" />
+                                                        <InputField
+                                                            onChange={handleChange}
+                                                            input={{
+                                                                id: "description",
+                                                                name: "description",
+                                                                type: "text",
+                                                                placeholder: "Description",
+                                                                value: enteredCourse.description,
+                                                                className: "form-control",
+                                                            }}
+                                                        />
+                                                        <div
+                                                            style={{
+                                                                fontSize: 14,
+                                                                color: "red",
+                                                                paddingLeft: "4px",
+                                                            }}
+                                                        >
+                                                            {errorState.descriptionError}
+                                                        </div>
                                                     </div>
                                                     <div>
                                                         <button type="submit" class="btn btn-primary">Submit</button>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../constants";
 import axios from "axios";
@@ -7,6 +7,10 @@ import InputField from "../components/InputField";
 const Login = () => {
   var loginMessage;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Login"
+  }, [])
 
   const [enteredLogin, setLogin] = useState({
     email: "",
