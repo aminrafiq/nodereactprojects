@@ -35,6 +35,12 @@ const ManageCourse = () => {
         const description = enteredCourse.description;
 
         if (title !== "" && description !== "") {
+
+            setCourseErrors({
+                titleError: '',
+                descriptionError: '',
+            });
+
             axios
                 .post(`${API_BASE_URL}courses/add`, {
                     title: title,
@@ -47,23 +53,16 @@ const ManageCourse = () => {
                 })
                 .then((response) => {
                     setCourseError({
-                        courseResult: response.data.result,
+                        courseStatus: response.data.status,
                         courseMessage: response.data.message,
                     });
-
-                    if (response.data.result === "success") {
-                        localStorage.setItem("isLoggedIn", true);
-                        localStorage.setItem(
-                            "userData",
-                            JSON.stringify(response.data.userInformation)
-                        );
-                        setCourse({ description: "", email: "" });
-                    }
+                    if (response.data.status === "success")
+                        setCourse({ title: '', description: '' })
                 })
                 .catch(function (error) {
                     setCourseError({
-                        courseResult: error.response.data.result,
-                        courseMessage: error.response.data.message,
+                        courseStatus: error.data.status,
+                        courseMessage: error.data.message,
                     });
                 });
         } else {
@@ -86,13 +85,13 @@ const ManageCourse = () => {
         }
     };
 
-    if (courseError.courseResult === "error") {
+    if (courseError.courseStatus === "error") {
         courseMessage = (
             <div className="alert alert-danger alert-dismissible text-center">
                 {courseError.courseMessage}
             </div>
         );
-    } else if (courseError.courseResult === "success") {
+    } else if (courseError.courseStatus === "success") {
         courseMessage = (
             <div className="alert alert-success alert-dismissible text-center">
                 {courseError.courseMessage}
@@ -105,17 +104,18 @@ const ManageCourse = () => {
             <Header />
             <div className="content-wrapper">
                 <Breadcrumb pageTitle="Add Course" />
-                <div class="content" >
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12 card card-solid">
-                                <div class="row">
-                                    <div class="col-md-4 offset-md-4">
+                <div className="content" >
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-12 card card-solid">
+                                <div className="row">
+                                    <div className="col-md-4 offset-md-4">
                                         <div>
                                             <form onSubmit={submitForm}>
-                                                <div class="card-body">
-                                                    <div class="form-group">
-                                                        <label for="title">Title</label>
+                                                <div className="card-body">
+                                                    {courseMessage}
+                                                    <div className="form-group">
+                                                        <label htmlFor="title">Title</label>
                                                         <InputField
                                                             onChange={handleChange}
                                                             input={{
@@ -137,7 +137,7 @@ const ManageCourse = () => {
                                                             {errorState.titleError}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div className="form-group">
                                                         <label for="description">Description</label>
                                                         <InputField
                                                             onChange={handleChange}
@@ -161,7 +161,7 @@ const ManageCourse = () => {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                        <button type="submit" className="btn btn-primary">Submit</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -175,7 +175,6 @@ const ManageCourse = () => {
             </div>
             <Footer />
         </div>
-
     )
 };
 

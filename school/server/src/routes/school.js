@@ -12,7 +12,7 @@ const router = express.Router();
 //router.post("/teachers/add", notLoggedIn, teachersController.postTeacher);
 //router.get("/students", notLoggedIn, studentsController.getStudents);
 //router.post("/students/add", notLoggedIn, studentsController.postStudent);
-router.get("/courses", isLoggedIn, coursesController.getCourses);
-//router.post("/courses/add", notLoggedIn, coursesController.postCourse);
+router.get("/courses", coursesController.getCourses);
+router.post("/courses/add", coursesController.postCourse);
 
 module.exports = router;

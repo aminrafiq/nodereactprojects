@@ -59,7 +59,6 @@ const ManageStudent = () => {
                     }
                 })
                 .catch(function (error) {
-                    console.log('i am here');
                     setStudentError({
                         studentResult: error.response.data.result,
                         studentMessage: error.response.data.message,

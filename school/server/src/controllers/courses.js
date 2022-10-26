@@ -3,6 +3,7 @@ const Course = require("../models/course");
 exports.getCourses = (req, res, next) => {
   Course.findAll()
     .then((courses) => {
+      res.status(200).json({ courses: courses });
     })
     .catch((error) => {
       console.log(error);
@@ -30,15 +31,13 @@ async function postCourse(req, res, next) {
   });
 
   if (created) {
-    courseMessage = { result: "success", message: "Course Created" };
+    statusMessage = "success";
+    courseMessage = "Course Created";
   } else {
-    courseMessage = { result: "error", message: "Course Already Exist" };
+    statusMessage = "error";
+    courseMessage = "Course Already Exist";
   }
-  res.render("school/manage-course", {
-    path: "/courses/add",
-    pageTitle: "Add Course",
-    returnMessage: courseMessage,
-  });
+  res.status(201).json({ status: statusMessage, message: courseMessage });
 }
 
 module.exports.postCourse = postCourse;

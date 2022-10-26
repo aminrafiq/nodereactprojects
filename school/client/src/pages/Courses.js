@@ -10,32 +10,27 @@ import { TOKEN } from "../utils/LoginInformation";
 const Courses = () => {
 
   const navigate = useNavigate();
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     if (!TOKEN) {
       navigate('/');
     }
     document.title = "Courses"
-  })
 
-  axios
-    .get(`${API_BASE_URL}courses`, {
-      headers: {
-        Authorization: 'Bearer ' + TOKEN
-      }
-    })
-    .then((response) => {
-      if (response.data.result === "success") {
-        localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem(
-          "userData",
-          JSON.stringify(response.data.userInformation)
-        );
-      }
-    })
-    .catch(function (error) {
-      navigate('/');
-    });
+    axios
+      .get(`${API_BASE_URL}courses`, {
+        headers: {
+          Authorization: 'Bearer ' + TOKEN
+        }
+      })
+      .then((response) => {
+        setCourses(response.data.courses);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="wrapper">
@@ -60,21 +55,21 @@ const Courses = () => {
                     <table className="table table-striped">
                       <thead>
                         <tr>
-                          <th style={{ width: "10px" }}>#</th>
-                          <th style={{ width: "26%" }}>Full Name</th>
-                          <th style={{ width: "24%" }}>Email</th>
-                          <th style={{ width: "16%" }}>Contact Number</th>
-                          <th style={{ width: "24%" }}>Address</th>
+                          <th style={{ width: "6%" }}>#</th>
+                          <th style={{ width: "24%" }}>Title</th>
+                          <th style={{ width: "60%" }}>Description</th>
+                          <th style={{ width: "10%" }}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
+                        {courses.map((course) => (
+                          <tr>
+                            <td>{course.id}</td>
+                            <td>{course.title}</td>
+                            <td>{course.description}</td>
+                            <td></td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>

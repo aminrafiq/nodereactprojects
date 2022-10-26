@@ -59,7 +59,6 @@ const ManageTeacher = () => {
                     }
                 })
                 .catch(function (error) {
-                    console.log('i am here');
                     setTeacherError({
                         teacherResult: error.response.data.result,
                         teacherMessage: error.response.data.message,
