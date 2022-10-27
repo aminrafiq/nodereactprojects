@@ -67,7 +67,7 @@ const Courses = () => {
                             <td>{course.id}</td>
                             <td>{course.title}</td>
                             <td>{course.description}</td>
-                            <td></td>
+                            <td><Link to={`/courses/edit/${course.id}`}>Edit Course</Link></td>
                           </tr>
                         ))}
                       </tbody>

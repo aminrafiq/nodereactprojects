@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useParams } from 'react-router-dom';
 import { API_BASE_URL } from "../constants";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
@@ -8,6 +9,8 @@ import InputField from "../components/InputField";
 import { TOKEN } from "../utils/LoginInformation";
 
 const ManageCourse = () => {
+    const { id } = useParams();
+    const isAddMode = !id;
     var courseMessage;
 
     const [enteredCourse, setCourse] = useState({
@@ -103,7 +106,7 @@ const ManageCourse = () => {
         <div className="wrapper">
             <Header />
             <div className="content-wrapper">
-                <Breadcrumb pageTitle="Add Course" />
+                <Breadcrumb pageTitle={isAddMode ? 'Add Course' : 'Edit Course'} />
                 <div className="content" >
                     <div className="container">
                         <div className="row">
